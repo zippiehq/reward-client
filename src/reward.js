@@ -8,6 +8,12 @@ function init(prefix, privatekey, apikey, uri, rewardtoken) {
     reward.init(prefix, privatekey, apikey, uri)
 }
 
+function getUserReference(user) {
+    const userRef = reward.getUserReference(user)
+
+    return userRef
+}
+
 async function rewardUser(user, amount) {
     const userRef = reward.getUserReference(user)
 
@@ -46,11 +52,22 @@ async function setUserKeyValue(user, key, value) {
     return response
 }
 
+
+async function getUserKeyValue(user, key) {
+    const userRef = reward.getUserReference(user)
+
+    const response = await reward.getUserKey(userRef, key)
+
+    return response
+}
+
 module.exports = {
     init,
+    getUserReference,
     rewardUser,
     getUserBalance,
     getClaimLink,
     createReferralCode,
-    setUserKeyValue
+    setUserKeyValue,
+    getUserKeyValue
 }

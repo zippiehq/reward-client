@@ -10,14 +10,35 @@ const app = express()
 dotenv.config()
 
 const rewardToken = process.env.REWARD_TOKEN
-const rewardURI = proces.env.REWARD_URI
+const rewardURI = process.env.REWARD_URI
 const zippieApiKey = process.env.ZIPPIE_API_KEY
 const prefix = process.env.SECURE_PREFIX
+
+const authenicationKey = process.env.AUTH_KEY
 
 reward.init(prefix, '', zippieApiKey, rewardURI, rewardToken)
 
 app.use(cors())
 app.use(bodyParser.json())
+
+/**
+ * @api {post} /get_user_reference
+ * @apiVersion 0.0.1
+ * @apiGroup Reward
+ * 
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/get_user_reference', async function(req,res) {
+    const user = req.body.user
+    if(authenicationKey === authKey) {
+        const userRef = reward.getUserReference(user)
+
+        res.send(userRef)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
 
 /**
  * @api {post} /reward_user Reward User
@@ -27,16 +48,23 @@ app.use(bodyParser.json())
  * 
  * @apiParam {String} user
  * @apiParam {Number} amount
+ * @apiParam {String} authKey internal authenication key
  * 
  * @apiSuccess (200) {String} ok
  */
 app.post('/reward_user', async function(req,res) {
     const user = req.body.user
     const amount = req.body.amount
+    const authKey = req.body.authKey
 
-    await reward.rewardUser(user, amount)
+    if(authenicationKey === authKey) {
+        await reward.rewardUser(user, amount)
 
-    res.send({status: 'ok'})
+        res.send({status: 'ok'})
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
 })
 
 /**
@@ -46,51 +74,22 @@ app.post('/reward_user', async function(req,res) {
  * @apiDescription Gets current unclaimed reward balance for a user
  * 
  * @apiParam {String} user
+ * @apiParam {String} authKey internal authenication key
  * 
  * @apiSuccess (200) {Number} user balance
  */
 app.post('/get_user_balance', async function(req,res) {
     const user = req.body.user
+    const authKey = req.body.authKey
 
+    if(authenicationKey === authKey) {
     const response = await reward.getUserBalance(user)
 
     res.send(response)
-})
-
-/**
- * @api {post} /get_claim_link Get Claim Link
- * @apiVersion 0.0.1
- * @apiGroup Reward
- * @apiDescription Gets a claim link for a user
- * 
- * @apiParam {String} user
- * 
- * @apiSuccess (200) {String} Link for user to claim rewards
- */
-app.post('/get_claim_link', async function(req,res) {
-    const user = req.body.user
-
-    const link = await reward.getClaimLink(user)
-
-    res.send(link)
-})
-
-/**
- * @api {post} /create_referral_code Create Referral Code
- * @apiVersion 0.0.1
- * @apiGroup Reward
- * @apiDescription Create a referral code for a user
- * 
- * @apiParam {String} user
- * 
- * @apiSuccess (200) {String} unique referral code
- */
-app.post('/create_referral_code', async function(req,res) {
-    const user = req.body.user
-
-    const code = await reward.createReferralCode(user)
-
-    res.send(code)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
 })
 
 /**
@@ -102,6 +101,7 @@ app.post('/create_referral_code', async function(req,res) {
  * @apiParam {String} user
  * @apiParam {String} key
  * @apiParam {String} value
+ * @apiParam {String} authKey internal authenication key
  * 
  * @apiSuccess (200) {String} ok
  */
@@ -109,12 +109,44 @@ app.post('/set_user_key_value', async function(req,res) {
     const user = req.body.user
     const key = req.body.key
     const value = req.body.value
+    const authKey = req.body.authKey
 
-    const response = await reward.setUserKeyValue(user, key, value)
+    if(authenicationKey === authKey) {
+        const response = await reward.setUserKeyValue(user, key, value)
 
-    res.send(response)
+        res.send(response)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
 })
 
+/**
+ * @api {post} /get_user_key_value
+ * @apiVertsion 0.0.1
+ * @apiGroup Reward
+ * 
+ * @apiParam user
+ * @apiParam key
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/get_user_key_value', async function(req, res) {
+    const user = req.body.user
+    const key = req.body.key
+    const authKey = req.body.authKey
+    if(authenicationKey === authKey) {
+        const value = reward.getUserKeyValue(user, key)
+        res.send(value)
+
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+app.get('/', function(req,res) {
+    res.send({status: 'ok'})
+})
 
 // Start express server
 const port = process.env.PORT || 8080

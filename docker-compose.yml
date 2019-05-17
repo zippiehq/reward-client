@@ -1,0 +1,13 @@
+version: '3'
+services:
+  webapp:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - REWARD_URI=https://rewardapi-goerli.zippie.org
+      - SECURE_PREFIX=yourprefix
+      - REWARD_TOKEN=0xA354cF34b9155fE293918Ba2b1e982044b2A1169
+      - ZIPPIE_API_KEY=user
+      - AUTH_KEY=yourauthkey
