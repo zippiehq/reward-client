@@ -6,8 +6,11 @@ services:
       - "8080:8080"
     environment:
       - PORT=8080
-      - REWARD_URI=https://rewardapi-goerli.zippie.org
+      - REWARD_URI=https://rewardapi-kovan.zippie.org
       - SECURE_PREFIX=yourprefix
-      - REWARD_TOKEN=0xA354cF34b9155fE293918Ba2b1e982044b2A1169
-      - ZIPPIE_API_KEY=user
+      - REWARD_TOKEN=0x89E2bb8091232Af7daC4bd473224Ee32AC8147b1
+      - ZIPPIE_API_KEY=owner
       - AUTH_KEY=yourauthkey
+    entrypoint: 
+      - node
+      - main.js

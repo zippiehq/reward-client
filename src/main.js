@@ -30,6 +30,8 @@ app.use(bodyParser.json())
  */
 app.post('/get_user_reference', async function(req,res) {
     const user = req.body.user
+    const authKey = req.body.authKey
+    
     if(authenicationKey === authKey) {
         const userRef = reward.getUserReference(user)
 
@@ -152,4 +154,5 @@ app.get('/', function(req,res) {
 const port = process.env.PORT || 8080
 const server = app.listen(port, '0.0.0.0', function() {
     console.log('app listening at http://%s:%s', server.address().address, server.address().port)
+    console.log({rewardToken, rewardURI, authenicationKey})
 })

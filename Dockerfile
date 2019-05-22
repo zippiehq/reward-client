@@ -28,5 +28,3 @@ COPY package-lock.json /app/package-lock.json
 
 # Extract licenses
 COPY --from=licenses /app/LICENSE.thirdparties.txt /app/LICENSE.thirdparties.txt
-
-CMD ["node", "main.js"]
