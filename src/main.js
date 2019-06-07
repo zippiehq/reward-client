@@ -150,6 +150,10 @@ app.get('/', function(req,res) {
     res.send({status: 'ok'})
 })
 
+app.get('/health', function(req, res) {
+  res.send(JSON.stringify({ notdead: true }))
+})
+
 // Start express server
 const port = process.env.PORT || 8080
 const server = app.listen(port, '0.0.0.0', function() {
