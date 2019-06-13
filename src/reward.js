@@ -51,7 +51,7 @@ async function createReferralCode(user) {
 }
 
 async function getUserRefFromReferralCode(code) {
-    const userRef = await reward.getUserRefFromReferralCode(code)
+    const userRef = await reward.getUserIdFromReferralCode(code)
 
     return userRef
 }
