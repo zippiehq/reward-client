@@ -196,7 +196,7 @@ app.post('/get_user_reference_from_referral_code', async function(req, res) {
 })
 
 app.get('/', function(req,res) {
-    res.send({status: 'ok'})
+    res.send({status: 'ok', version: '1.0.2'})
 })
 
 app.get('/health', function(req, res) {
