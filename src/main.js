@@ -70,6 +70,33 @@ app.post('/reward_user', async function(req,res) {
 })
 
 /**
+ * @api {post} /reward_user_reference Reward User Reference
+ * @apiVersion 0.0.1
+ * @apiGroup Reward
+ * @apiDescription Allocate Rewards to a User Reference
+ * 
+ * @apiParam {String} userRef
+ * @apiParam {Number} amount
+ * @apiParam {String} authKey internal authenication key
+ * 
+ * @apiSuccess (200) {String} ok
+ */
+app.post('/reward_user_reference', async function(req,res) {
+    const userRef = req.body.userRef
+    const amount = req.body.amount
+    const authKey = req.body.authKey
+
+    if(authenicationKey === authKey) {
+        await reward.rewardUserReference(userRef, amount)
+
+        res.send({status: 'ok'})
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
  * @api {post} /get_user_balance Get User Balance
  * @apiVersion 0.0.1
  * @apiGroup Reward
@@ -125,11 +152,11 @@ app.post('/set_user_key_value', async function(req,res) {
 
 /**
  * @api {post} /get_user_key_value
- * @apiVertsion 0.0.1
+ * @apiVersion 0.0.1
  * @apiGroup Reward
  * 
- * @apiParam user
- * @apiParam key
+ * @apiParam {String} user
+ * @apiParam {String} key
  * @apiParam {String} authKey internal authenication key
  */
 app.post('/get_user_key_value', async function(req, res) {
@@ -139,6 +166,28 @@ app.post('/get_user_key_value', async function(req, res) {
     if(authenicationKey === authKey) {
         const value = reward.getUserKeyValue(user, key)
         res.send(value)
+
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
+ * @api {post} /get_user_reference_from_referral_code
+ * @apiVersion 0.0.1
+ * @apiGroup Reward
+ * 
+ * @apiParam {String} referralCode
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/get_user_reference_from_referral_code', async function(req, res) {
+    const referral = req.body.referralCode
+    const authKey = req.body.authKey
+
+    if(authenicationKey === authKey) {
+        const userRef = await reward.getUserRefFromReferralCode(referral)
+        res.send(userRef)
 
     } else {
         res.statusCode = 401

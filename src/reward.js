@@ -22,6 +22,12 @@ async function rewardUser(user, amount) {
     return response
 }
 
+async function rewardUserReference(userRef, amount) {
+    const response = await reward.rewardTo(userRef,rewardTokenAddress, amount)
+
+    return response
+}
+
 async function getUserBalance(user) {
     const userRef = reward.getUserReference(user)
 
@@ -42,6 +48,12 @@ async function createReferralCode(user) {
     const response = await reward.createReferralCode(userRef)
 
     return response
+}
+
+async function getUserRefFromReferralCode(code) {
+    const userRef = await reward.getUserRefFromReferralCode(code)
+
+    return userRef
 }
 
 async function setUserKeyValue(user, key, value) {
@@ -65,9 +77,11 @@ module.exports = {
     init,
     getUserReference,
     rewardUser,
+    rewardUserReference,
     getUserBalance,
     getClaimLink,
     createReferralCode,
+    getUserRefFromReferralCode,
     setUserKeyValue,
     getUserKeyValue
 }
