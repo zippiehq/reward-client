@@ -14,10 +14,10 @@ function getUserReference(user) {
     return userRef
 }
 
-async function rewardUser(user, amount) {
+async function rewardUser(user, amount, message) {
     const userRef = reward.getUserReference(user)
 
-    const response = await reward.rewardTo(userRef,rewardTokenAddress, amount)
+    const response = await reward.rewardTo(userRef,rewardTokenAddress, amount, message)
 
     return response
 }
@@ -73,6 +73,39 @@ async function getUserKeyValue(user, key) {
     return response
 }
 
+async function queuePendingReward(user, amount, expiry, message) {
+    const userRef = reward.getUserReference(user)
+
+    const response = await reward.queuePendingReward(userRef, amount, rewardTokenAddress, message, expiry)
+    return response
+}
+
+async function getPendingRewards(user) {
+    const userRef = reward.getUserReference(user)
+    const response = await reward.getPendingRewards(userRef)
+
+    return response
+}
+
+async function releasePendingReward(user, rewardId) {
+    const userRef = reward.getUserReference(user)
+
+    const response = await reward.releasePendingReward(userRef, rewardId)
+    return response
+}
+
+async function cancelPendingReward(user, rewardId) {
+    const userRef = reward.getUserReference(user)
+
+    const response = await reward.cancelPendingReward(userRef, rewardId)
+    return response
+} 
+
+async function sendEvent(jsonData) {
+    const response = await reward.sendEvent(jsonData)
+    return response
+}
+
 module.exports = {
     init,
     getUserReference,
@@ -83,5 +116,10 @@ module.exports = {
     createReferralCode,
     getUserRefFromReferralCode,
     setUserKeyValue,
-    getUserKeyValue
+    getUserKeyValue,
+    queuePendingReward,
+    releasePendingReward,
+    getPendingRewards,
+    cancelPendingReward,
+    sendEvent
 }

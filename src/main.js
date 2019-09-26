@@ -22,7 +22,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 /**
- * @api {post} /get_user_reference
+ * @api {post} /get_user_reference Get User Reference
  * @apiVersion 0.0.1
  * @apiGroup Reward
  * 
@@ -151,9 +151,10 @@ app.post('/set_user_key_value', async function(req,res) {
 })
 
 /**
- * @api {post} /get_user_key_value
+ * @api {post} /get_user_key_value Get User Key Value
  * @apiVersion 0.0.1
  * @apiGroup Reward
+ * @apiDescription 
  * 
  * @apiParam {String} user
  * @apiParam {String} key
@@ -174,7 +175,7 @@ app.post('/get_user_key_value', async function(req, res) {
 })
 
 /**
- * @api {post} /get_user_reference_from_referral_code
+ * @api {post} /get_user_reference_from_referral_code Get User Reference from Referral Code
  * @apiVersion 0.0.1
  * @apiGroup Reward
  * 
@@ -195,8 +196,124 @@ app.post('/get_user_reference_from_referral_code', async function(req, res) {
     }
 })
 
+/**
+ * @api {post} /queue_pending_reward Queue Pending Reward
+ * @apiVersion 1.1.0
+ * @apiGroup Conditional Rewards
+ * 
+ * @apiParam {String} user
+ * @apiParam {Number} amount
+ * @apiParam {Date} expiry
+ * @apiParam {String} message
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/queue_pending_reward', async function(req,res) {
+    const authKey = req.body.authKey
+
+    const user = req.body.user
+    const amount = req.body.amount
+    const expiry = req.body.expiry
+    const message = req.body.message
+
+    if(authenicationKey === authKey) {
+        const response = await reward.queuePendingReward(user, amount, expiry, message)
+        res.send(response)
+
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
+ * @api {post} /list_pending_rewards List Pending Rewards
+ * @apiVersion 1.1.0
+ * @apiGroup Conditional Rewards
+ * 
+ * @apiParam {String} user
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/list_pending_rewards', async function(req,res) {
+    const authKey = req.body.authKey
+    const user = req.body.user
+
+    if(authenicationKey === authKey) {
+        const response = await reward.getPendingRewards(user)
+        res.send(response)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
+ * @api {post} /release_pending_reward Release Pending Reward
+ * @apiVersion 1.1.0
+ * @apiGroup Conditional Rewards
+ * 
+ * @apiParam {String} user
+ * @apiParam {String} reward_id
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/release_pending_reward', async function(req,res) {
+    const authKey = req.body.authKey
+    const user = req.body.user
+    const rewardId = req.body.reward_id
+
+    if(authenicationKey === authKey) {
+        const response = await reward.releasePendingReward(user, rewardId)
+        res.send(response)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
+ * @api {post} /cancel_pending_reward Cancel Pending Reward
+ * @apiVersion 1.1.0
+ * @apiGroup Conditional Rewards
+ * 
+ * @apiParam {String} user
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/cancel_pending_reward', async function(req, res) {
+    const authKey = req.body.authKey
+    const user = req.body.user
+    const rewardId = req.body.reward_id
+
+    if(authenicationKey === authKey) {
+        const response = await reward.cancelPendingReward(user, rewardId)
+        res.send(response)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
+/**
+ * @api {post} /send_event Send Event
+ * @apiVersion 1.1.0
+ * @apiGroup Events
+ * 
+ * @apiParam {JSON} data
+ * @apiParam {String} authKey internal authenication key
+ */
+app.post('/send_event', async function(req,res) {
+    const authKey = req.body.authKey
+    const data = req.body.data
+
+    if(authenicationKey === authKey) {
+        const response = await reward.sendEvent(data)
+        res.send(response)
+    } else {
+        res.statusCode = 401
+        res.send("Not Authorised")
+    }
+})
+
 app.get('/', function(req,res) {
-    res.send({status: 'ok', version: '1.0.2'})
+    res.send({status: 'ok', version: '1.1.0'})
 })
 
 app.get('/health', function(req, res) {
