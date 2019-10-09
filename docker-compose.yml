@@ -4,13 +4,8 @@ services:
     build: .
     ports:
       - "8080:8080"
-    environment:
-      - PORT=8080
-      - REWARD_URI=https://goerli-rewardapi.zippie.org
-      - SECURE_PREFIX=<generate this>
-      - REWARD_TOKEN=0xdF75F9630b3c47e1271EB0Ae6e62B3B82b76c3aE
-      - ZIPPIE_API_KEY=c6f85fb0-dcd7-45ca-8c5c-82e38c41939a
-      - AUTH_KEY=<generate this>
+    env_file:
+      .env
     entrypoint: 
       - node
       - main.js
