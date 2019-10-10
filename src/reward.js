@@ -82,7 +82,7 @@ async function queuePendingReward(user, amount, expiry, message) {
 
 async function getPendingRewards(user) {
     const userRef = reward.getUserReference(user)
-    const response = await reward.getPendingRewards(userRef)
+    const response = await reward.getPendingRewards(userRef, rewardTokenAddress)
 
     return response
 }

@@ -6,12 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/main.js",
+    "start-dev": "node -r dotenv/config src/main.js dotenv_config_path=./development.env",
     "docs": "apidoc -i src/ -o docs/"
   },
   "author": "Zippie",
   "license": "ISC",
   "dependencies": {
-    "@zippie/zippie-utils": "^0.6.11",
+    "@zippie/zippie-utils": "^0.6.15",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "dotenv": "^8.1.0",
