@@ -275,6 +275,7 @@ app.post('/release_pending_reward', async function(req,res) {
  * @apiGroup Conditional Rewards
  * 
  * @apiParam {String} user
+ * @apiParam {String} reward_id
  * @apiParam {String} authKey internal authenication key
  */
 app.post('/cancel_pending_reward', async function(req, res) {
