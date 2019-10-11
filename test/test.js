@@ -2,7 +2,7 @@ const expect = require('chai').expect
 const axios = require('axios')
 
 const serviceUrl = 'http://localhost:8080'
-const authKey = 'yourauthkey'
+const authKey = 'mykey'
 
 async function postJson(url, json) {
     const response = await axios.post(
@@ -36,6 +36,24 @@ describe('Reward Client Tests', function () {
         {user: 'exampleuser@gmail.com', authKey})
 
         console.log(response)
+    })
+
+    it('queue_pending_reward', async function() {
+        const expiry = new Date()
+        const response = await postJson(serviceUrl + '/queue_pending_reward',
+        {user: 'example@gmail.com', authKey, amount:'50', message:'test pending', expiry: expiry.toUTCString()})
+        console.log(response)
+    })
+
+    it('list_pending_rewards', async function() {
+        const response = await postJson(serviceUrl + '/list_pending_rewards',
+        {user: 'example@gmail.com', authKey})
+        console.log(response)
+    })
+
+    it('release_pending_reward', async function() {
+        const response = await postJson(serviceUrl + '/release_pending_reward',
+        {user: 'example@gmail.com', reward_id: ''})
     })
 
 })

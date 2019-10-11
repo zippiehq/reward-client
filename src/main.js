@@ -31,6 +31,12 @@ app.use(bodyParser.json())
 app.post('/get_user_reference', async function(req,res) {
     const user = req.body.user
     const authKey = req.body.authKey
+
+    if(!user || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
     
     if(authenicationKey === authKey) {
         const userRef = reward.getUserReference(user)
@@ -59,6 +65,12 @@ app.post('/reward_user', async function(req,res) {
     const amount = req.body.amount
     const authKey = req.body.authKey
 
+    if(!user || !amount || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         await reward.rewardUser(user, amount)
 
@@ -86,6 +98,12 @@ app.post('/reward_user_reference', async function(req,res) {
     const amount = req.body.amount
     const authKey = req.body.authKey
 
+    if(!userRef || !amount || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         await reward.rewardUserReference(userRef, amount)
 
@@ -110,6 +128,12 @@ app.post('/reward_user_reference', async function(req,res) {
 app.post('/get_user_balance', async function(req,res) {
     const user = req.body.user
     const authKey = req.body.authKey
+
+    if(!user || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
 
     if(authenicationKey === authKey) {
     const response = await reward.getUserBalance(user)
@@ -140,6 +164,12 @@ app.post('/set_user_key_value', async function(req,res) {
     const value = req.body.value
     const authKey = req.body.authKey
 
+    if(!user || !key || !value || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         const response = await reward.setUserKeyValue(user, key, value)
 
@@ -164,6 +194,13 @@ app.post('/get_user_key_value', async function(req, res) {
     const user = req.body.user
     const key = req.body.key
     const authKey = req.body.authKey
+
+    if(!user || !key || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         const value = reward.getUserKeyValue(user, key)
         res.send(value)
@@ -185,6 +222,12 @@ app.post('/get_user_key_value', async function(req, res) {
 app.post('/get_user_reference_from_referral_code', async function(req, res) {
     const referral = req.body.referralCode
     const authKey = req.body.authKey
+
+    if(!referral || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
 
     if(authenicationKey === authKey) {
         const userRef = await reward.getUserRefFromReferralCode(referral)
@@ -215,6 +258,12 @@ app.post('/queue_pending_reward', async function(req,res) {
     const expiry = req.body.expiry
     const message = req.body.message
 
+    if(!user || !amount || !expiry || !message || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         const response = await reward.queuePendingReward(user, amount, expiry, message)
         res.send(response)
@@ -236,6 +285,12 @@ app.post('/queue_pending_reward', async function(req,res) {
 app.post('/list_pending_rewards', async function(req,res) {
     const authKey = req.body.authKey
     const user = req.body.user
+
+    if(!user || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
 
     if(authenicationKey === authKey) {
         const response = await reward.getPendingRewards(user)
@@ -260,6 +315,12 @@ app.post('/release_pending_reward', async function(req,res) {
     const user = req.body.user
     const rewardId = req.body.reward_id
 
+    if(!user || !rewardId || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         const response = await reward.releasePendingReward(user, rewardId)
         res.send(response)
@@ -283,6 +344,12 @@ app.post('/cancel_pending_reward', async function(req, res) {
     const user = req.body.user
     const rewardId = req.body.reward_id
 
+    if(!user || !rewardId || authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
+
     if(authenicationKey === authKey) {
         const response = await reward.cancelPendingReward(user, rewardId)
         res.send(response)
@@ -303,6 +370,12 @@ app.post('/cancel_pending_reward', async function(req, res) {
 app.post('/send_event', async function(req,res) {
     const authKey = req.body.authKey
     const data = req.body.data
+
+    if(!data || !authKey) {
+        res.code = 400
+        res.send('Missing Parameters')
+        return
+    }
 
     if(authenicationKey === authKey) {
         const response = await reward.sendEvent(data)
