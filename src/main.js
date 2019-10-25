@@ -314,7 +314,7 @@ app.post('/send_event', async function(req,res) {
 })
 
 app.get('/', function(req,res) {
-    res.send({status: 'ok', version: '1.1.0'})
+    res.send({status: 'ok', version: '1.2.0'})
 })
 
 app.get('/health', function(req, res) {
